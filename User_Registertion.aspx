@@ -76,7 +76,7 @@
 
         <label for="txtconfirmpassword">Confirm Password:</label><br />
         <asp:TextBox ID="txtconfirmpassword" runat="server" TextMode="Password" CssClass="textbox" />
-        <asp:CompareValidator ID="cv" runat="server" ErrorMessage="* Passwords must match" ForeColor="Red" ControlToValidate="txtconfirmpassword" ControlToCompare="txtpassword" CssClass="error" /><br />
+        <asp:CompareValidator ID="cv" runat="server" ErrorMessage="* Passwords must match *" ForeColor="Red" ControlToValidate="txtconfirmpassword" ControlToCompare="txtpassword" CssClass="error" /><br />
 
         <asp:Button ID="btnRegister" runat="server" Text="Register" OnClick="Unnamed_Click" CssClass="button" />
     </form>

@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.IO;   // ✅ Added for file handling
+using System.IO;  
 
 namespace ITCTRLS_Task
 {
@@ -49,7 +49,6 @@ namespace ITCTRLS_Task
                 return;
             }
 
-            // ✅ Handle image upload
             string photoPath = null;
             if (FileUploadImage.HasFile)
             {
@@ -62,10 +61,10 @@ namespace ITCTRLS_Task
                 string fileName = Path.GetFileName(FileUploadImage.FileName);
                 string savePath = Path.Combine(folderPath, fileName);
                 FileUploadImage.SaveAs(savePath);
-                photoPath = "Uploads/" + fileName;  // ✅ Store relative path for DB
+                photoPath = "Uploads/" + fileName;  
             }
 
-            // ✅ Insert into database (added PhotoPath column)
+          
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string query = @"INSERT INTO Applicants 
@@ -81,7 +80,7 @@ namespace ITCTRLS_Task
                     cmd.Parameters.AddWithValue("@MobileNumber", MNumbetrt.Text.Trim());
                     cmd.Parameters.AddWithValue("@Email", EmailTxt.Text.Trim());
                     cmd.Parameters.AddWithValue("@MessageBox", TxtMessage.Text.Trim());
-                    cmd.Parameters.AddWithValue("@PhotoPath", (object)photoPath ?? DBNull.Value);  // ✅ new line
+                    cmd.Parameters.AddWithValue("@PhotoPath", (object)photoPath ?? DBNull.Value);  
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -89,7 +88,7 @@ namespace ITCTRLS_Task
 
             try
             {
-                // ✅ Existing email functions
+              
                 SendMailToApplicant(EmailTxt.Text.Trim(), TxtBox.Text.Trim(), TxtMessage.Text.Trim());
                 SendMailToAdmin(TxtBox.Text.Trim(), NAge.Text.Trim(), EBox.Text.Trim(), GetSelectedLanguages(),
                                 TxtFname.Text.Trim(), MNumbetrt.Text.Trim(), EmailTxt.Text.Trim(), TxtMessage.Text.Trim());

@@ -184,6 +184,7 @@
     <Content Include="Uploads\car.jpeg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Uploads\VinodpassPhoto.png" />
     <Content Include="User_Registertion.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />

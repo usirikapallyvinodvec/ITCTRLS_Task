@@ -4,6 +4,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Admin Dashboard</title>
+
+  
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -11,12 +15,14 @@
             margin: 0;
             padding: 20px;
         }
+
         h2 {
             text-align: center;
             color: #004aad;
             font-weight: 600;
             margin-bottom: 25px;
         }
+
         .grid-container {
             width: 95%;
             margin: 0 auto;
@@ -24,31 +30,51 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow-x: auto; 
         }
+
         .gridview {
             width: 100%;
             border-collapse: collapse;
+            min-width: 800px; 
         }
+
         .gridview th {
             background-color: #007bff;
             color: white;
             padding: 10px;
             text-align: left;
+            white-space: nowrap;
         }
+
         .gridview td {
             border: 1px solid #ccc;
             padding: 10px;
+            vertical-align: middle;
+            word-wrap: break-word;
         }
+
+        img.app-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+       
         .btn {
             padding: 6px 12px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 13px;
+            margin: 2px;
         }
+
         .btn-view { background-color: #17a2b8; color: white; }
         .btn-edit { background-color: #ffc107; color: black; }
         .btn-delete { background-color: #dc3545; color: white; }
+
         .btn-logout {
             background-color: #6c757d;
             color: white;
@@ -59,6 +85,8 @@
             float: right;
             cursor: pointer;
         }
+
+      
         .details-panel, .edit-panel {
             display: none;
             margin-top: 20px;
@@ -67,10 +95,12 @@
             border-radius: 10px;
             border: 1px solid #cfd8dc;
         }
+
         .details-panel h3, .edit-panel h3 {
             color: #007bff;
             margin-bottom: 10px;
         }
+
         .edit-panel input {
             width: 100%;
             margin-bottom: 8px;
@@ -78,6 +108,7 @@
             border: 1px solid #ccc;
             border-radius: 6px;
         }
+
         .btn-update {
             background-color: #28a745;
             color: white;
@@ -85,17 +116,46 @@
             padding: 8px 16px;
             border-radius: 6px;
         }
-        img.app-photo {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
+
+     
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .grid-container {
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .gridview {
+                font-size: 13px;
+                min-width: 600px;
+            }
+
+            .btn {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+
+            .btn-logout {
+                width: 100%;
+                float: none;
+                display: block;
+                margin: 20px auto 0 auto;
+            }
         }
     </style>
 </head>
+
 <body>
     <form id="form1" runat="server">
         <h2>Admin Dashboard - Applicant Details</h2>
 
+   
         <div class="grid-container">
             <asp:GridView ID="GridViewApplicants" runat="server" AutoGenerateColumns="False"
                 CssClass="gridview" OnRowCommand="GridViewApplicants_RowCommand">
@@ -108,15 +168,13 @@
                     <asp:BoundField DataField="MobileNumber" HeaderText="Mobile No." />
                     <asp:BoundField DataField="Email" HeaderText="Email" />
 
-                 
-                  <asp:ImageField DataImageUrlField="PhotoPath"
+                    <asp:ImageField DataImageUrlField="PhotoPath"
                         DataImageUrlFormatString="~/Uploads/{0}"
                         HeaderText="Photo"
                         NullDisplayText="No Photo"
                         AlternateText="No Image"
                         ControlStyle-Width="80"
                         ControlStyle-Height="80" />
-
 
                     <asp:BoundField DataField="MessageBox" HeaderText="Message" />
 
