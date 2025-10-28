@@ -84,14 +84,19 @@
 
         <label for="UN">Username:</label><br />
         <asp:TextBox runat="server" ID="UN" CssClass="textbox" />
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="* Username is required" ForeColor="Red" ControlToValidate="UN" CssClass="error" /><br />
+        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server"
+            ErrorMessage="* Username is required" ForeColor="Red" ControlToValidate="UN"
+            CssClass="error" Display="Dynamic" /><br />
 
         <label for="PD">Password:</label><br />
         <asp:TextBox runat="server" ID="PD" TextMode="Password" CssClass="textbox" />
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="* Password is required" ForeColor="Red" ControlToValidate="PD" CssClass="error" /><br />
+        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server"
+            ErrorMessage="* Password is required" ForeColor="Red" ControlToValidate="PD"
+            CssClass="error" Display="Dynamic" /><br />
 
         <asp:Button ID="BT" runat="server" Text="Login" OnClick="BT_Click" CssClass="button" />
-        <asp:Button ID="btnRegister" runat="server" Text="Register" CssClass="button register-btn" OnClick="btnRegister_Click" />
+        <asp:Button ID="btnRegister" runat="server" Text="Register"
+            CssClass="button register-btn" OnClick="btnRegister_Click" CausesValidation="false" />
 
         <asp:Label ID="Msg" runat="server" Font-Bold="true"></asp:Label>
     </form>

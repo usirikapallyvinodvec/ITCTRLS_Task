@@ -181,6 +181,9 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
+    <Content Include="Uploads\car.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="User_Registertion.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />

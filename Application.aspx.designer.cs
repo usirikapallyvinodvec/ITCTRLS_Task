@@ -33,13 +33,13 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox TxtBox;
 
         /// <summary>
-        /// RequiredFieldValidator1 control.
+        /// rfvName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvName;
 
         /// <summary>
         /// NAge control.
@@ -51,13 +51,22 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox NAge;
 
         /// <summary>
-        /// RequiredFieldValidator2 control.
+        /// rfvAge control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvAge;
+
+        /// <summary>
+        /// RangeValidator1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RangeValidator RangeValidator1;
 
         /// <summary>
         /// EBox control.
@@ -69,13 +78,13 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox EBox;
 
         /// <summary>
-        /// RequiredFieldValidator3 control.
+        /// rfvEdu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEdu;
 
         /// <summary>
         /// CheckBox control.
@@ -87,6 +96,15 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.CheckBoxList CheckBox;
 
         /// <summary>
+        /// cvLanguages control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator cvLanguages;
+
+        /// <summary>
         /// TxtFname control.
         /// </summary>
         /// <remarks>
@@ -96,13 +114,13 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox TxtFname;
 
         /// <summary>
-        /// RequiredFieldValidator5 control.
+        /// rfvFather control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator5;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvFather;
 
         /// <summary>
         /// MNumbetrt control.
@@ -114,13 +132,22 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox MNumbetrt;
 
         /// <summary>
-        /// RequiredFieldValidator6 control.
+        /// rfvMobile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMobile;
+
+        /// <summary>
+        /// revMobile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revMobile;
 
         /// <summary>
         /// EmailTxt control.
@@ -132,13 +159,22 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox EmailTxt;
 
         /// <summary>
-        /// RegularExpressionValidator1 control.
+        /// rfvEmail control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvEmail;
+
+        /// <summary>
+        /// revEmail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revEmail;
 
         /// <summary>
         /// TxtMessage control.
@@ -150,30 +186,48 @@ namespace ITCTRLS_Task
         protected global::System.Web.UI.WebControls.TextBox TxtMessage;
 
         /// <summary>
-        /// RequiredFieldValidatorMsg control.
+        /// rfvMsg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorMsg;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvMsg;
 
         /// <summary>
-        /// Button control.
+        /// FileUploadImage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Button;
+        protected global::System.Web.UI.WebControls.FileUpload FileUploadImage;
 
         /// <summary>
-        /// MsgLabel control.
+        /// rfvFile control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label MsgLabel;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvFile;
+
+        /// <summary>
+        /// ValidationSummary1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ValidationSummary ValidationSummary1;
+
+        /// <summary>
+        /// ButtonSubmit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonSubmit;
     }
 }

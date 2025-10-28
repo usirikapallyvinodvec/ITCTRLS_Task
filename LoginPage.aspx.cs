@@ -21,12 +21,11 @@ namespace ITCTRLS_Task
                         cmd.Parameters.AddWithValue("@Password", PD.Text.Trim());
 
                         con.Open();
-                        int count = (int)cmd.ExecuteScalar();
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
                         con.Close();
 
                         if (count > 0)
                         {
-                            // Success login
                             ClientScript.RegisterStartupScript(this.GetType(), "alert",
                                 "alert('Login Successful!'); window.location='Application.aspx';", true);
                         }
@@ -47,7 +46,8 @@ namespace ITCTRLS_Task
 
         protected void btnRegister_Click(object sender, EventArgs e)
         {
-            Response.Redirect("User_Registration.aspx");
+            
+            Response.Redirect("User_Registertion.aspx"); 
         }
     }
 }

@@ -27,7 +27,7 @@ namespace ITCTRLS_Task
         {
             using (SqlConnection con = new SqlConnection(connStr))
             {
-                string query = "SELECT FullName, Age, Education, Languages, FatherName, MobileNumber, Email, MessageBox FROM Applicants";
+                string query = "SELECT FullName, Age, Education, Languages, FatherName, MobileNumber, Email, PhotoPath, MessageBox FROM Applicants";
                 SqlDataAdapter da = new SqlDataAdapter(query, con);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -51,7 +51,7 @@ namespace ITCTRLS_Task
                     cmd.ExecuteNonQuery();
                     con.Close();
                 }
-                LoadApplicants(); // Refresh grid after delete
+                LoadApplicants();
             }
 
             else if (e.CommandName == "View")
@@ -66,7 +66,14 @@ namespace ITCTRLS_Task
 
                     if (dr.Read())
                     {
+                        // ✅ FIXED PHOTO DISPLAY PATH
+                        string photo = "~/Uploads/" + dr["PhotoPath"].ToString();
+                        string imgHtml = !string.IsNullOrEmpty(dr["PhotoPath"].ToString())
+                            ? $"<img src='{ResolveUrl(photo)}' class='app-photo' /><br/>"
+                            : "<b>Photo Not Available</b><br/>";
+
                         LiteralDetails.Text = $@"
+                            {imgHtml}
                             <b>Full Name:</b> {dr["FullName"]}<br/>
                             <b>Age:</b> {dr["Age"]}<br/>
                             <b>Education:</b> {dr["Education"]}<br/>
@@ -76,10 +83,75 @@ namespace ITCTRLS_Task
                             <b>Email:</b> {dr["Email"]}<br/>
                             <b>Message:</b> {dr["MessageBox"]}";
                         DetailsPanel.Style["display"] = "block";
+                        EditPanel.Style["display"] = "none";
                     }
                     con.Close();
                 }
             }
+
+            else if (e.CommandName == "EditRow")
+            {
+                using (SqlConnection con = new SqlConnection(connStr))
+                {
+                    string query = "SELECT * FROM Applicants WHERE Email = @Email";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@Email", email);
+                    con.Open();
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    if (dr.Read())
+                    {
+                        HiddenEmail.Value = dr["Email"].ToString();
+                        txtFullName.Text = dr["FullName"].ToString();
+                        txtAge.Text = dr["Age"].ToString();
+                        txtEducation.Text = dr["Education"].ToString();
+                        txtLanguages.Text = dr["Languages"].ToString();
+                        txtFatherName.Text = dr["FatherName"].ToString();
+                        txtMobileNumber.Text = dr["MobileNumber"].ToString();
+                        txtEmail.Text = dr["Email"].ToString();
+                        txtMessage.Text = dr["MessageBox"].ToString();
+                        EditPanel.Style["display"] = "block";
+                        DetailsPanel.Style["display"] = "none";
+                    }
+                    con.Close();
+                }
+            }
+        }
+
+        protected void BtnUpdate_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection con = new SqlConnection(connStr))
+            {
+                string query = @"UPDATE Applicants SET 
+                                    FullName = @FullName, 
+                                    Age = @Age, 
+                                    Education = @Education, 
+                                    Languages = @Languages, 
+                                    FatherName = @FatherName, 
+                                    MobileNumber = @MobileNumber, 
+                                    MessageBox = @Message,
+                                    Email = @NewEmail
+                                 WHERE Email = @Email";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@FullName", txtFullName.Text.Trim());
+                cmd.Parameters.AddWithValue("@Age", txtAge.Text.Trim());
+                cmd.Parameters.AddWithValue("@Education", txtEducation.Text.Trim());
+                cmd.Parameters.AddWithValue("@Languages", txtLanguages.Text.Trim());
+                cmd.Parameters.AddWithValue("@FatherName", txtFatherName.Text.Trim());
+                cmd.Parameters.AddWithValue("@MobileNumber", txtMobileNumber.Text.Trim());
+                cmd.Parameters.AddWithValue("@Message", txtMessage.Text.Trim());
+                cmd.Parameters.AddWithValue("@NewEmail", txtEmail.Text.Trim());
+                cmd.Parameters.AddWithValue("@Email", HiddenEmail.Value);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+
+            LoadApplicants();
+            EditPanel.Style["display"] = "none";
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Record updated successfully!');", true);
         }
 
         protected void BtnLogout_Click(object sender, EventArgs e)

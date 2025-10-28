@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.IO;   // ✅ Added for file handling
 
 namespace ITCTRLS_Task
 {
@@ -12,36 +13,64 @@ namespace ITCTRLS_Task
     {
         string connectionString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
 
-      
-        public void ClearFields()
-        {
-            TxtBox.Text = string.Empty;
-            NAge.Text = string.Empty;
-            EBox.Text = string.Empty;
-            CheckBox.ClearSelection();
-            TxtFname.Text = string.Empty;
-            MNumbetrt.Text = string.Empty;
-            EmailTxt.Text = string.Empty;
-            TxtMessage.Text = string.Empty;
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
-            {
                 ClearFields();
+        }
+
+        private void ClearFields()
+        {
+            TxtBox.Text = NAge.Text = EBox.Text = TxtFname.Text = MNumbetrt.Text = EmailTxt.Text = TxtMessage.Text = "";
+            CheckBox.ClearSelection();
+        }
+
+        protected void ValidateLanguages(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = false;
+            foreach (ListItem item in CheckBox.Items)
+            {
+                if (item.Selected)
+                {
+                    args.IsValid = true;
+                    break;
+                }
             }
         }
 
         protected void Button_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid)
+                return;
 
+            if (MNumbetrt.Text.Trim().Length != 10)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Mobile number must be exactly 10 digits!');", true);
+                return;
+            }
+
+            // ✅ Handle image upload
+            string photoPath = null;
+            if (FileUploadImage.HasFile)
+            {
+                string folderPath = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                string fileName = Path.GetFileName(FileUploadImage.FileName);
+                string savePath = Path.Combine(folderPath, fileName);
+                FileUploadImage.SaveAs(savePath);
+                photoPath = "Uploads/" + fileName;  // ✅ Store relative path for DB
+            }
+
+            // ✅ Insert into database (added PhotoPath column)
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string query = @"INSERT INTO Applicants 
-                                (FullName, Age, Education, Languages, FatherName, MobileNumber, Email, MessageBox) 
-                                VALUES (@FullName, @Age, @Education, @Languages, @FatherName, @MobileNumber, @Email, @MessageBox)";
-
+                                (FullName, Age, Education, Languages, FatherName, MobileNumber, Email, MessageBox, PhotoPath) 
+                                VALUES (@FullName, @Age, @Education, @Languages, @FatherName, @MobileNumber, @Email, @MessageBox, @PhotoPath)";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@FullName", TxtBox.Text.Trim());
@@ -52,63 +81,81 @@ namespace ITCTRLS_Task
                     cmd.Parameters.AddWithValue("@MobileNumber", MNumbetrt.Text.Trim());
                     cmd.Parameters.AddWithValue("@Email", EmailTxt.Text.Trim());
                     cmd.Parameters.AddWithValue("@MessageBox", TxtMessage.Text.Trim());
-
+                    cmd.Parameters.AddWithValue("@PhotoPath", (object)photoPath ?? DBNull.Value);  // ✅ new line
                     con.Open();
                     cmd.ExecuteNonQuery();
-                    con.Close();
                 }
             }
 
-          
             try
             {
-                SendMail(EmailTxt.Text.Trim(), TxtBox.Text.Trim(), TxtMessage.Text.Trim());
-                string successScript = "alert('Application submitted successfully! Email sent to your address.');";
-                ClientScript.RegisterStartupScript(this.GetType(), "success", successScript, true);
+                // ✅ Existing email functions
+                SendMailToApplicant(EmailTxt.Text.Trim(), TxtBox.Text.Trim(), TxtMessage.Text.Trim());
+                SendMailToAdmin(TxtBox.Text.Trim(), NAge.Text.Trim(), EBox.Text.Trim(), GetSelectedLanguages(),
+                                TxtFname.Text.Trim(), MNumbetrt.Text.Trim(), EmailTxt.Text.Trim(), TxtMessage.Text.Trim());
+
+                ClientScript.RegisterStartupScript(this.GetType(), "success",
+                    "alert('Application submitted successfully! Email sent to both applicant and admin.');", true);
             }
             catch (Exception ex)
             {
-                string failScript = $"alert('Application saved, but email sending failed: {ex.Message}');";
-                ClientScript.RegisterStartupScript(this.GetType(), "fail", failScript, true);
+                ClientScript.RegisterStartupScript(this.GetType(), "fail",
+                    $"alert('Application saved, but email sending failed: {ex.Message}');", true);
             }
 
-            
             ClearFields();
         }
 
-     
         private string GetSelectedLanguages()
         {
-            string languages = "";
+            string langs = "";
             foreach (ListItem item in CheckBox.Items)
-            {
                 if (item.Selected)
-                {
-                    if (!string.IsNullOrEmpty(languages))
-                        languages += ", ";
-                    languages += item.Text;
-                }
-            }
-            return languages;
+                    langs += (langs == "" ? "" : ", ") + item.Text;
+            return langs;
         }
 
-        // Send email using Gmail SMTP with App Password
-        private void SendMail(string toEmail, string fullName, string messageContent)
+        private void SendMailToApplicant(string toEmail, string fullName, string message)
         {
             string fromEmail = "usirikapallyvinod8465@gmail.com";
-            string appPassword = "rmokdmnuzzbwartd"; // Use your 16-character App Password
+            string appPassword = "rmokdmnuzzbwartd";
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(fromEmail, "ITCTRLS Hiring Team");
             mail.To.Add(toEmail);
-            mail.Subject = "Application Received - ITCTRLS -- Thank You " + fullName;
-            mail.Body = messageContent;
-            mail.IsBodyHtml = false;
+            mail.Subject = $"Application Received - Thank You {fullName}";
+            mail.Body = $"Dear {fullName},\n\nThank you for applying at ITCTRLS.\n\nYour message: {message}\n\nWe’ll contact you soon.";
+            new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(fromEmail, appPassword),
+                EnableSsl = true
+            }.Send(mail);
+        }
 
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-            smtp.Credentials = new NetworkCredential(fromEmail, appPassword);
-            smtp.EnableSsl = true;
-            smtp.Send(mail);
+        private void SendMailToAdmin(string name, string age, string education, string languages,
+                                     string father, string mobile, string email, string message)
+        {
+            string fromEmail = "usirikapallyvinod8465@gmail.com";
+            string appPassword = "rmokdmnuzzbwartd";
+            string adminEmail = "itctrls.hiring@gmail.com";
+
+            string body = $@"
+                New applicant details:
+
+                Full Name: {name}
+                Age: {age}
+                Education: {education}
+                Languages: {languages}
+                Father's Name: {father}
+                Mobile: {mobile}
+                Email: {email}
+                Message: {message}";
+
+            new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(fromEmail, appPassword),
+                EnableSsl = true
+            }.Send(new MailMessage(fromEmail, adminEmail, "New Applicant - " + name, body));
         }
     }
 }
